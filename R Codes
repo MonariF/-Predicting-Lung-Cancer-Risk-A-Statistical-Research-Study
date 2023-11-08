@@ -1,0 +1,121 @@
+data=read.csv(file.choose())
+head(data)
+colnames(data)
+
+
+#Objective 1: Develop a Lung Cancer Risk Prediction Model
+# Load necessary libraries
+library(caret)
+
+# Load the dataset (assuming your data is in a data frame called 'data')
+# Define the features
+features <- c("GENDER", "AGE", "SMOKING", "YELLOW_FINGERS", "ANXIETY", "PEER_PRESSURE", 
+              "CHRONIC.DISEASE", "FATIGUE", "ALLERGY", "WHEEZING", "ALCOHOL.CONSUMING", 
+              "COUGHING", "SHORTNESS.OF.BREATH", "SWALLOWING.DIFFICULTY", "CHEST.PAIN", "LUNG_CANCER")
+
+# Create a training dataset
+training_data <- data[features]
+
+# Create a data partition for training and testing
+set.seed(123) # for reproducibility
+inTraining <- createDataPartition(training_data$LUNG_CANCER, p = 0.7, 
+                                  list = FALSE)
+training_set <- training_data[inTraining, ]
+testing_set <- training_data[-inTraining, ]
+
+# Recode 'LUNG_CANCER' to 0 for "NO" and 1 for "YES"
+training_set$LUNG_CANCER <- ifelse(training_set$LUNG_CANCER == "NO", 0, 1)
+
+# Build the logistic regression model
+model <- glm(LUNG_CANCER ~ ., data = training_set, family = "binomial")
+
+summary(model)
+
+# Make predictions on the testing set
+predictions <- predict(model, newdata = testing_set, type = "response")
+
+
+
+
+
+
+
+
+# Assuming you have model predictions (0 to 1 scale)
+# You can define thresholds to categorize individuals into risk groups
+# Adjust these thresholds based on your data and requirements
+high_risk_threshold <- 0.7
+moderate_risk_threshold <- 0.4
+
+# Categorize individuals into risk groups
+risk_categories <- ifelse(predictions > high_risk_threshold, "High Risk",
+                          ifelse(predictions > moderate_risk_threshold, "Moderate Risk", "Low Risk"))
+
+# Add the risk category to your dataset
+data$RISK_CATEGORY <- risk_categories
+
+# Now, you can provide recommendations based on the risk category
+# Define recommendations based on your domain knowledge
+recommendations <- switch(
+  risk_categories,
+  "High Risk" = "High-risk individuals should undergo regular screenings and consult a healthcare professional.",
+  "Moderate Risk" = "Moderate-risk individuals should consider lifestyle changes and periodic health check-ups.",
+  "Low Risk" = "Low-risk individuals should maintain a healthy lifestyle and monitor their health regularly."
+)
+
+# Add the recommendations to your dataset
+data$RECOMMENDATIONS <- recommendations
+
+# You can then view or export the data with risk categories and recommendations
+# For example, to view the data:
+head(data)
+
+
+#Objective 2: Identify Key Risk Factors
+# Recode 'LUNG_CANCER' to 0 (NO) and 1 (YES)
+data$LUNG_CANCER <- as.factor(ifelse(data$LUNG_CANCER == "NO", 0, 1))
+
+# Build the logistic regression model
+model <- glm(LUNG_CANCER ~ ., data = data, family = "binomial")
+
+# Make predictions on the data
+predictions <- predict(model, type = "response")
+
+# Assuming you have a test dataset, recode it similarly if needed
+# testing_set$LUNG_CANCER <- as.factor(ifelse(testing_set$LUNG_CANCER == "NO", 0, 1))
+
+# Continue with model evaluation and analysis
+
+# Fit a logistic regression model to identify significant predictors
+model <- glm(LUNG_CANCER ~ ., data = data, family = "binomial")
+
+# Extract model coefficients and p-values
+coefficients_summary <- summary(model)
+significant_variables <- coefficients_summary$coefficients[coefficients_summary$coefficients[, "Pr(>|z|)"] < 0.05, ]
+
+# Print significant variables and their coefficients
+print(significant_variables)
+
+
+
+#Objective 3: Risk Stratification and Recommendation
+# Create an empty vector to store recommendations
+recommendations <- character(length(risk_categories))
+
+# Loop through risk categories and assign recommendations
+for (i in seq_along(risk_categories)) {
+  if (risk_categories[i] == "High Risk") {
+    recommendations[i] <- "High-risk individuals should undergo regular screenings and consult a healthcare professional."
+  } else if (risk_categories[i] == "Moderate Risk") {
+    recommendations[i] <- "Moderate-risk individuals should consider lifestyle changes and periodic health check-ups."
+  } else {
+    recommendations[i] <- "Low-risk individuals should maintain a healthy lifestyle and monitor their health regularly."
+  }
+}
+
+# Add the recommendations to your dataset
+data$RECOMMENDATIONS <- recommendations
+
+
+
+
