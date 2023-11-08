@@ -1,5 +1,4 @@
 Predicting Lung Cancer Risk: A Statistical Analysis Based on Demographic and Health Factors.
-Abstract:
 Lung cancer is a prevalent and life-threatening disease with a profound global impact. Early detection and accurate risk prediction are pivotal in mitigating its consequences. This study presents a statistical analysis aimed at predicting lung cancer risk by leveraging demographic and health-related factors. The research unfolds in three specific objectives:
 Objective 1: Develop a Lung Cancer Risk Prediction Model.
 •	Utilizing logistic regression, a predictive model is established. The model considers factors such as age, gender, smoking history, and various health-related indicators. The performance of the model is assessed to gauge its effectiveness.
