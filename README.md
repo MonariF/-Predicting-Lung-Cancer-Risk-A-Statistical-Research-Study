@@ -7,3 +7,4 @@ Objective 2: Identify Key Risk Factors.
 Objective 3: Risk Stratification and Recommendation.
 •	Individuals are stratified into risk categories (high, moderate, and low) based on their predicted risk scores. Specific recommendations are provided for each risk category, aiding in tailored prevention and early intervention strategies.
 The findings of this study have the potential to contribute significantly to the field of lung cancer risk prediction, improving the identification of at-risk individuals and guiding targeted prevention measures. By focusing on the intersection of demographic and health factors, this research offers valuable insights into enhancing public health initiatives for lung cancer prevention.
+Data source: https://www.kaggle.com/datasets/mysarahmadbhat/lung-cancer  
